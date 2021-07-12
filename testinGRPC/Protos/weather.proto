@@ -2,21 +2,19 @@ syntax = "proto3";
 
 option csharp_namespace = "testinGRPC.Protos";
 
+import "google/protobuf/timestamp.proto";
 package weather;
 
 service WeatherService {
-	rpc GetCurrentWeather (GetCurrentWeatherRequest) returns (WeatherResponse);
+	rpc GetCurrentWeather (GetCurrentWeatherForCityRequest) returns (WeatherResponse);
+	rpc GetCurrentWeatherStream (GetCurrentWeatherForCityRequest) returns (stream WeatherResponse);
+	rpc GetMultiCurrentWeatherStream (stream GetCurrentWeatherForCityRequest) returns ( MultiWeatherWeatherResponse);
 }
 
 
 
-message GetCurrentWeatherRequest{
+message GetCurrentWeatherForCityRequest{
 	string city = 1;
-	enum Units {
-		Standard = 0;
-		Metric = 1;
-		Imperial = 2;
-	}
 	Units units =2;
 }
 
@@ -24,6 +22,18 @@ message GetCurrentWeatherRequest{
 message WeatherResponse{
 	double Temperature  = 1 ;
 	double feels_like = 2 ;
+	google.protobuf.Timestamp timeStamp =  3;
+	string city = 4;
+	Units units =5;
+
 }
 
+message MultiWeatherWeatherResponse {
+	repeated WeatherResponse weather = 1;
+}
 
+enum Units {
+		Standard = 0;
+		Metric = 1;
+		Imperial = 2;
+	}

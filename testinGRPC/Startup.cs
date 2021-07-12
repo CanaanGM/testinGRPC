@@ -49,6 +49,7 @@ namespace testinGRPC
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapGrpcService<Weather>();
+        endpoints.MapGrpcService<ChatService>();
 
 
 
